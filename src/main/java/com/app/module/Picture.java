@@ -18,7 +18,6 @@ public class Picture {
     @ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name="owner_id")
-    @Column(name = "user_id")
     private User owner;
 
 

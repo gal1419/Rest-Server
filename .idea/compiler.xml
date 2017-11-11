@@ -7,10 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="gs-rest-service" />
+        <module name="rest-server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="gs-rest-service" target="1.8" />
+      <module name="rest-server" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
