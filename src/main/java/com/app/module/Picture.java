@@ -1,7 +1,6 @@
 package com.app.module;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name="picture")
@@ -10,14 +9,14 @@ public class Picture {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private Integer Id;
+    private Long Id;
 
     @Column(name = "location")
     private String location;
 
     @ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name="owner_id")
+    @JoinColumn(name="user_owner_id")
     private User owner;
 
 
@@ -29,11 +28,11 @@ public class Picture {
         this.owner = owner;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return Id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         Id = id;
     }
 

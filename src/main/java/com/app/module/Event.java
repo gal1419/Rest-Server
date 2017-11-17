@@ -1,6 +1,9 @@
 package com.app.module;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -10,7 +13,7 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-    private Integer id;
+    private Long id;
 
     @Column(name="title")
     private String title;
@@ -28,7 +31,8 @@ public class Event {
             joinColumns=@JoinColumn(name="event_id"),
             inverseJoinColumns=@JoinColumn(name="user_id")
     )
-    private List<User> users;
+    @JsonIgnore
+    private List<User> participants = new ArrayList<>();
 
 
     public Event() {
@@ -39,11 +43,11 @@ public class Event {
         this.title = title;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -55,16 +59,15 @@ public class Event {
         this.title = title;
     }
 
-
-    public List<User> getUsers() {
-        return users;
+    public List<User> getParticipants() {
+        return participants;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setParticipants(List<User> participants) {
+        this.participants = participants;
     }
 
-    public void addUser(User user) {
-        this.users.add(user);
+    public void addParticipant(User user) {
+        this.participants.add(user);
     }
 }

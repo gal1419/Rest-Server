@@ -1,7 +1,7 @@
 package com.app.controllers;
 
 import com.app.module.User;
-import com.app.module.UserRepository;
+import com.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
