@@ -1,6 +1,8 @@
 package com.app.module;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import java.util.List;
@@ -14,15 +16,20 @@ public class ApplicationUser {
     @Column(name = "id")
     private Long Id;
 
+    @NotEmpty
     @Column(name = "first_name")
     private String FirstName;
 
+    @NotEmpty
     @Column(name = "last_name")
     private String LastName;
 
-    @Column(name="email")
+    @NotEmpty
+    @Email
+    @Column(name="email", unique = true)
     private String email;
 
+    @NotEmpty
     @Column(name = "password")
     private String password;
 
