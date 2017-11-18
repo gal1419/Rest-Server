@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(name="user")
-public class User {
+public class ApplicationUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,6 +23,10 @@ public class User {
     @Column(name="email")
     private String email;
 
+    @Column(name = "password")
+    private String password;
+
+
     @ManyToMany(fetch=FetchType.LAZY,
             cascade= {CascadeType.PERSIST, CascadeType.MERGE,
                     CascadeType.DETACH, CascadeType.REFRESH})
@@ -35,10 +39,10 @@ public class User {
 
 
 
-    public User() {
+    public ApplicationUser() {
     }
 
-    public User(String firstName, String lastName, String email) {
+    public ApplicationUser(String firstName, String lastName, String email) {
         FirstName = firstName;
         LastName = lastName;
         this.email = email;
@@ -72,6 +76,14 @@ public class User {
         return email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -80,7 +92,7 @@ public class User {
         return events;
     }
 
-    public void setEvens(List<Event> event) {
+    public void setEvents(List<Event> event) {
         this.events = event;
     }
 
@@ -90,7 +102,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "ApplicationUser{" +
                 "Id=" + Id +
                 ", FirstName='" + FirstName + '\'' +
                 ", LastName='" + LastName + '\'' +

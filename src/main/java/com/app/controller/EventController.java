@@ -1,7 +1,7 @@
-package com.app.controllers;
+package com.app.controller;
 
+import com.app.module.ApplicationUser;
 import com.app.module.Event;
-import com.app.module.User;
 import com.app.repository.EventRepository;
 import com.app.repository.UserRepository;
 import org.json.JSONException;
@@ -9,8 +9,6 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 
 
 @Controller
@@ -34,7 +32,7 @@ public class EventController {
             ownerId = this.getOwnerId(request);
         } catch (Exception e) {}
 
-        User owner = this.userRepository.findOne(ownerId);
+        ApplicationUser owner = this.userRepository.findOne(ownerId);
 
         Event event = new Event(title);
         event.addParticipant(owner);

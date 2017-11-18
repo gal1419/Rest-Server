@@ -17,13 +17,13 @@ public class Picture {
     @ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name="user_owner_id")
-    private User owner;
+    private ApplicationUser owner;
 
 
     public Picture() {
     }
 
-    public Picture(String location, User owner) {
+    public Picture(String location, ApplicationUser owner) {
         this.location = location;
         this.owner = owner;
     }
@@ -44,11 +44,11 @@ public class Picture {
         this.location = location;
     }
 
-    public User getOwner() {
+    public ApplicationUser getOwner() {
         return owner;
     }
 
-    public void setOwner(User owner) {
+    public void setOwner(ApplicationUser owner) {
         this.owner = owner;
     }
 }

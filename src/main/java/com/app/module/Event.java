@@ -21,7 +21,7 @@ public class Event {
     @ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name="owner_id")
-    private User owner;
+    private ApplicationUser owner;
 
     @ManyToMany(fetch=FetchType.LAZY,
             cascade= {CascadeType.PERSIST, CascadeType.MERGE,
@@ -32,7 +32,7 @@ public class Event {
             inverseJoinColumns=@JoinColumn(name="user_id")
     )
     @JsonIgnore
-    private List<User> participants = new ArrayList<>();
+    private List<ApplicationUser> participants = new ArrayList<>();
 
 
     public Event() {
@@ -59,15 +59,15 @@ public class Event {
         this.title = title;
     }
 
-    public List<User> getParticipants() {
+    public List<ApplicationUser> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(List<User> participants) {
+    public void setParticipants(List<ApplicationUser> participants) {
         this.participants = participants;
     }
 
-    public void addParticipant(User user) {
+    public void addParticipant(ApplicationUser user) {
         this.participants.add(user);
     }
 }
