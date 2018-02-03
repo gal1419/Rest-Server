@@ -43,7 +43,6 @@ public class EventController {
 
     @GetMapping(path="/all")
     public @ResponseBody Iterable<Event> getAllEvents() {
-        // This returns a JSON or XML with the users
         return eventRepository.findAll();
     }
 
