@@ -1,6 +1,5 @@
 package com.app.module;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -8,25 +7,25 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name="user")
+@Table(name = "user")
 public class ApplicationUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long Id;
+    private Long id;
 
     @NotEmpty
     @Column(name = "first_name")
-    private String FirstName;
+    private String firstName;
 
     @NotEmpty
     @Column(name = "last_name")
-    private String LastName;
+    private String lastName;
 
     @NotEmpty
     @Email
-    @Column(name="email", unique = true)
+    @Column(name = "email", unique = true)
     private String email;
 
     @NotEmpty
@@ -34,53 +33,56 @@ public class ApplicationUser {
     private String password;
 
 
-    @ManyToMany(fetch=FetchType.LAZY,
-            cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                     CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(
-            name="event_user",
-            joinColumns=@JoinColumn(name="user_id"),
-            inverseJoinColumns=@JoinColumn(name="event_id")
+            name = "event_user",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id")
     )
     private List<Event> events;
-
 
 
     public ApplicationUser() {
     }
 
     public ApplicationUser(String firstName, String lastName, String email) {
-        FirstName = firstName;
-        LastName = lastName;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
     }
 
     public Long getId() {
-        return Id;
+        return this.id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getFirstName() {
-        return FirstName;
+        return this.firstName;
     }
 
     public void setFirstName(String firstName) {
-        FirstName = firstName;
+        this.firstName = firstName;
     }
 
     public String getLastName() {
-        return LastName;
+        return this.lastName;
     }
 
     public void setLastName(String lastName) {
-        LastName = lastName;
+        this.lastName = lastName;
     }
 
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -89,10 +91,6 @@ public class ApplicationUser {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public List<Event> getEvents() {
@@ -110,9 +108,9 @@ public class ApplicationUser {
     @Override
     public String toString() {
         return "ApplicationUser{" +
-                "Id=" + Id +
-                ", FirstName='" + FirstName + '\'' +
-                ", LastName='" + LastName + '\'' +
+                "Id=" + this.id +
+                ", FirstName='" + this.firstName + '\'' +
+                ", LastName='" + this.lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", events=" + events +
                 '}';

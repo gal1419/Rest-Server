@@ -3,7 +3,7 @@ package com.app.controller;
 import com.app.module.ApplicationUser;
 import com.app.module.Event;
 import com.app.repository.EventRepository;
-import com.app.repository.UserRepository;
+import com.app.repository.ApplicationUserRepository;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class EventController {
     private EventRepository eventRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private ApplicationUserRepository applicationUserRepository;
 
     @PostMapping(path="/add", consumes = "application/json", produces = "application/json")
     public @ResponseBody String addNewEvent(@RequestBody String requestBody) {
@@ -32,7 +32,7 @@ public class EventController {
             ownerId = this.getOwnerId(request);
         } catch (Exception e) {}
 
-        ApplicationUser owner = this.userRepository.findOne(ownerId);
+        ApplicationUser owner = this.applicationUserRepository.findOne(ownerId);
 
         Event event = new Event(title);
         event.addParticipant(owner);
