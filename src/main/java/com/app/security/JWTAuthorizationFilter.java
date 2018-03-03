@@ -1,6 +1,10 @@
 package com.app.security;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,16 +34,20 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             return;
         }
 
-        UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
+        try {
+            UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        } catch (ExpiredJwtException e) {
+            res.setStatus(HttpStatus.UNAUTHORIZED.value());
+            res.getWriter().write(convertObjectToJson(e));
+        }
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(req, res);
     }
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(SecurityConstants.HEADER_STRING);
         if (token != null) {
-            // parse the token.
             String user = Jwts.parser()
                     .setSigningKey(SecurityConstants.SECRET.getBytes())
                     .parseClaimsJws(token.replace(SecurityConstants.TOKEN_PREFIX, ""))
@@ -52,5 +60,13 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             return null;
         }
         return null;
+    }
+
+    private String convertObjectToJson(Object object) throws JsonProcessingException {
+        if (object == null) {
+            return null;
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(object);
     }
 }

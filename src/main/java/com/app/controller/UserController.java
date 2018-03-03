@@ -2,8 +2,10 @@ package com.app.controller;
 
 import com.app.Application;
 import com.app.module.ApplicationUser;
+import com.app.module.Event;
 import com.app.repository.ApplicationUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,4 +43,17 @@ public class UserController {
         Principal p = request.getUserPrincipal();
         return applicationUserRepository.findByEmail(p.getName());
     }
+
+    @GetMapping("/events")
+    public @ResponseBody Iterable<Event> getUserEvents(HttpServletRequest request) {
+        Principal p = request.getUserPrincipal();
+        ApplicationUser applicationUser = applicationUserRepository.findByEmail(p.getName());
+
+        if (applicationUser == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        return applicationUser.getEvents();
+    }
+
 }

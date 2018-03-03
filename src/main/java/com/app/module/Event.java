@@ -42,6 +42,9 @@ public class Event {
     @JsonIgnore
     private List<ApplicationUser> participants = new ArrayList<>();
 
+    @Column(name = "image")
+    private String image;
+
 
     public Event() {
 
@@ -93,5 +96,13 @@ public class Event {
 
     public void addParticipant(ApplicationUser user) {
         this.participants.add(user);
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
