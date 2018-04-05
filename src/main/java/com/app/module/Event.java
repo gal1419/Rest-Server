@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,12 +40,11 @@ public class Event {
             joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    @JsonIgnore
     private List<ApplicationUser> participants = new ArrayList<>();
 
+    @Lob
     @Column(name = "image")
-    private String image;
-
+    private byte[] image;
 
     public Event() {
 
@@ -98,11 +98,11 @@ public class Event {
         this.participants.add(user);
     }
 
-    public String getImage() {
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 }

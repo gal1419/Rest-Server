@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.List;
 
 
 @RestController
@@ -53,7 +54,8 @@ public class UserController {
             throw new UsernameNotFoundException("User not found");
         }
 
-        return applicationUser.getEvents();
+        List<Event> events = applicationUser.getEvents();
+        return events;
     }
 
 }

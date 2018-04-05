@@ -1,6 +1,7 @@
 package com.app.controller;
 
 import java.io.IOException;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ public class FileUploadController {
     @PostMapping("/add")
     public String handleFileUpload(@RequestParam("name") String name, @RequestParam("file") MultipartFile file) {
 
-        storageService.store(file);
+        storageService.store(file, file.getOriginalFilename() + UUID.randomUUID().toString());
 
         return "redirect:/";
     }
