@@ -1,12 +1,14 @@
 package com.app.controller;
 
-import com.app.Application;
 import com.app.module.ApplicationUser;
 import com.app.module.Event;
 import com.app.repository.ApplicationUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,13 +27,28 @@ public class UserController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("/sign-up")
-    public void signUp(@RequestBody ApplicationUser user) {
+    public ResponseEntity signUp(@RequestBody ApplicationUser user) {
+
+        if (StringUtils.isEmpty(user.getEmail()) || StringUtils.isEmpty(user.getPassword())) {
+             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
+        }
+
         ApplicationUser applicationUser = new ApplicationUser();
         applicationUser.setFirstName(user.getFirstName());
         applicationUser.setLastName(user.getLastName());
         applicationUser.setEmail(user.getEmail());
         applicationUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        applicationUserRepository.save(applicationUser);
+
+        if (null != applicationUserRepository.findByEmail(applicationUser.getEmail())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This email address is taken");
+        }
+
+        try {
+            ApplicationUser newUser = applicationUserRepository.save(applicationUser);
+            return ResponseEntity.ok(newUser);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
+        }
     }
 
     @PostMapping("/login")

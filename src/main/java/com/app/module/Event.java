@@ -44,6 +44,7 @@ public class Event {
 
     @Lob
     @Column(name = "image")
+    @JsonIgnore
     private byte[] image;
 
     public Event() {

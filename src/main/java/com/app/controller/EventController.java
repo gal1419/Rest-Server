@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -74,13 +75,14 @@ public class EventController {
     }
 
     @GetMapping(
-            value = "/get-image/{eventId}",
+            value = "/thumbnail/{eventId}",
             produces = MediaType.IMAGE_JPEG_VALUE
     )
-    public @ResponseBody byte[] getImageWithMediaType(@PathVariable(value="eventId") String id) throws Exception {
+    public ResponseEntity<byte[]> getImageWithMediaType(@PathVariable(value="eventId") String id) throws Exception {
 
         try {
-            return eventRepository.findOne(Long.parseLong(id)).getImage();
+            byte[] image =  eventRepository.findOne(Long.parseLong(id)).getImage();
+            return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
         } catch (Exception e) {
             throw new Exception("Event id is not in the correct format", e);
         }

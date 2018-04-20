@@ -1,5 +1,6 @@
 package com.app.module;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -14,9 +15,10 @@ public class Picture {
     @Column(name = "id")
     private Long Id;
 
-    @NotEmpty
-    @Column(name = "location")
-    private String location;
+    @Lob
+    @Column(name = "image")
+    @JsonIgnore
+    private byte[] image;
 
     @NotNull
     @ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
@@ -24,12 +26,21 @@ public class Picture {
     @JoinColumn(name="user_owner_id")
     private ApplicationUser owner;
 
+    @Column(name = "description")
+    private String description;
+
+    @NotNull
+    @ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name="event_owner_id")
+    private Event event;
+
 
     public Picture() {
     }
 
-    public Picture(String location, ApplicationUser owner) {
-        this.location = location;
+    public Picture(byte[] image, ApplicationUser owner) {
+        this.image = image;
         this.owner = owner;
     }
 
@@ -41,12 +52,12 @@ public class Picture {
         Id = id;
     }
 
-    public String getLocation() {
-        return location;
+    public byte[] getImage() {
+        return image;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public ApplicationUser getOwner() {
@@ -55,5 +66,21 @@ public class Picture {
 
     public void setOwner(ApplicationUser owner) {
         this.owner = owner;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
     }
 }
