@@ -2,8 +2,8 @@ package com.app.controller;
 
 import com.app.module.ApplicationUser;
 import com.app.module.Event;
-import com.app.repository.EventRepository;
 import com.app.repository.ApplicationUserRepository;
+import com.app.repository.EventRepository;
 import com.app.storage.StorageService;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,22 +16,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.Principal;
-import java.util.UUID;
 
 
 @Controller
-@RequestMapping(path="/event")
+@RequestMapping(path = "/event")
 public class EventController {
 
+    private final StorageService storageService;
     @Autowired
     private EventRepository eventRepository;
-
     @Autowired
     private ApplicationUserRepository applicationUserRepository;
-
-    private final StorageService storageService;
 
     @Autowired
     public EventController(StorageService storageService) {
@@ -39,10 +35,11 @@ public class EventController {
     }
 
 
-    @PostMapping(path="/add")
-    public @ResponseBody Event addNewEvent(HttpServletRequest request, @RequestParam("title") String title, @RequestParam("address") String address, @RequestParam("file") MultipartFile file) {
+    @PostMapping(path = "/add")
+    public @ResponseBody
+    Event addNewEvent(HttpServletRequest request, @RequestParam("title") String title, @RequestParam("address") String address, @RequestParam("file") MultipartFile file) {
         Principal p = request.getUserPrincipal();
-        ApplicationUser user =  applicationUserRepository.findByEmail(p.getName());
+        ApplicationUser user = applicationUserRepository.findByEmail(p.getName());
 
         Event event = new Event(title);
         event.setOwner(user);
@@ -55,14 +52,15 @@ public class EventController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        storageService.store(file, file.getOriginalFilename() + UUID.randomUUID().toString());
+        //storageService.store(file, file.getOriginalFilename() + UUID.randomUUID().toString());
         this.eventRepository.save(event);
 
         return event;
     }
 
-    @GetMapping(path="/all")
-    public @ResponseBody Iterable<Event> getAllEvents() {
+    @GetMapping(path = "/all")
+    public @ResponseBody
+    Iterable<Event> getAllEvents() {
         return eventRepository.findAll();
     }
 
@@ -78,10 +76,10 @@ public class EventController {
             value = "/thumbnail/{eventId}",
             produces = MediaType.IMAGE_JPEG_VALUE
     )
-    public ResponseEntity<byte[]> getImageWithMediaType(@PathVariable(value="eventId") String id) throws Exception {
+    public ResponseEntity<byte[]> getImageWithMediaType(@PathVariable(value = "eventId") String id) throws Exception {
 
         try {
-            byte[] image =  eventRepository.findOne(Long.parseLong(id)).getImage();
+            byte[] image = eventRepository.findOne(Long.parseLong(id)).getImage();
             return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
         } catch (Exception e) {
             throw new Exception("Event id is not in the correct format", e);

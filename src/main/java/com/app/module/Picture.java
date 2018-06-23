@@ -1,13 +1,12 @@
 package com.app.module;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="picture")
+@Table(name = "picture")
 public class Picture {
 
     @Id
@@ -21,18 +20,18 @@ public class Picture {
     private byte[] image;
 
     @NotNull
-    @ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name="user_owner_id")
+    @JoinColumn(name = "user_owner_id")
     private ApplicationUser owner;
 
     @Column(name = "description")
     private String description;
 
     @NotNull
-    @ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name="event_owner_id")
+    @JoinColumn(name = "event_owner_id")
     private Event event;
 
 

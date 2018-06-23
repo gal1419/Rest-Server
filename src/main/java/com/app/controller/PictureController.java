@@ -6,9 +6,6 @@ import com.app.module.Picture;
 import com.app.repository.ApplicationUserRepository;
 import com.app.repository.EventRepository;
 import com.app.repository.PictureRepository;
-import com.app.storage.StorageService;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.UUID;
 
 
 @Controller
-@RequestMapping(path="/picture")
+@RequestMapping(path = "/picture")
 public class PictureController {
 
     @Autowired
@@ -35,14 +31,21 @@ public class PictureController {
     @Autowired
     private EventRepository eventRepository;
 
-    public PictureController(){
+    public PictureController() {
+    }
+
+    @GetMapping(path = "/event/{eventId}")
+    public @ResponseBody
+    Iterable<Picture> getAllPicturesByEventId(@PathVariable(value = "eventId") String eventId) {
+        return pictureRepository.findByEvent(eventRepository.findOne(Long.parseLong(eventId)));
     }
 
 
-    @PostMapping(path="/add")
-    public @ResponseBody ResponseEntity addNewEvent(HttpServletRequest request, @RequestParam("eventId") String eventId, @RequestParam("description") String description, @RequestParam("file") MultipartFile file) {
+    @PostMapping(path = "/add")
+    public @ResponseBody
+    ResponseEntity addNewPicture(HttpServletRequest request, @RequestParam("eventId") String eventId, @RequestParam("description") String description, @RequestParam("file") MultipartFile file) {
         Principal p = request.getUserPrincipal();
-        ApplicationUser user =  applicationUserRepository.findByEmail(p.getName());
+        ApplicationUser user = applicationUserRepository.findByEmail(p.getName());
         Event event = eventRepository.findOne(Long.parseLong(eventId));
 
         Picture picture = new Picture();
@@ -64,7 +67,7 @@ public class PictureController {
             value = "/{pictureId}",
             produces = MediaType.IMAGE_JPEG_VALUE
     )
-    public ResponseEntity<byte[]> getImageWithMediaType(@PathVariable(value="pictureId") String id) throws Exception {
+    public ResponseEntity<byte[]> getImageWithMediaType(@PathVariable(value = "pictureId") String id) throws Exception {
 
         try {
             byte[] image = pictureRepository.findOne(Long.parseLong(id)).getImage();

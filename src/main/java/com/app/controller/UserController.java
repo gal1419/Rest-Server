@@ -17,7 +17,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping(path="/users")
+@RequestMapping(path = "/users")
 public class UserController {
 
     @Autowired
@@ -30,7 +30,7 @@ public class UserController {
     public ResponseEntity signUp(@RequestBody ApplicationUser user) {
 
         if (StringUtils.isEmpty(user.getEmail()) || StringUtils.isEmpty(user.getPassword())) {
-             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
         }
 
         ApplicationUser applicationUser = new ApplicationUser();
@@ -40,7 +40,7 @@ public class UserController {
         applicationUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
         if (null != applicationUserRepository.findByEmail(applicationUser.getEmail())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This email address is taken");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("This email address is taken");
         }
 
         try {
@@ -52,18 +52,21 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public @ResponseBody ApplicationUser login(@RequestBody ApplicationUser user) {
+    public @ResponseBody
+    ApplicationUser login(@RequestBody ApplicationUser user) {
         return applicationUserRepository.findByEmail(user.getEmail());
     }
 
     @GetMapping("/user")
-    public @ResponseBody ApplicationUser getUser(HttpServletRequest request) {
+    public @ResponseBody
+    ApplicationUser getUser(HttpServletRequest request) {
         Principal p = request.getUserPrincipal();
         return applicationUserRepository.findByEmail(p.getName());
     }
 
     @GetMapping("/events")
-    public @ResponseBody Iterable<Event> getUserEvents(HttpServletRequest request) {
+    public @ResponseBody
+    Iterable<Event> getUserEvents(HttpServletRequest request) {
         Principal p = request.getUserPrincipal();
         ApplicationUser applicationUser = applicationUserRepository.findByEmail(p.getName());
 
