@@ -59,8 +59,7 @@ public class PictureController {
             return ResponseEntity.badRequest().body("");
 
         }
-        pictureRepository.save(picture);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(pictureRepository.save(picture));
     }
 
     @GetMapping(
