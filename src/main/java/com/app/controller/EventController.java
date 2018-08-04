@@ -34,6 +34,16 @@ public class EventController {
         this.storageService = storageService;
     }
 
+    @GetMapping(path = "/{id}")
+    public @ResponseBody
+    Event getEventById(@PathVariable(value = "id") String id) throws Exception {
+        try {
+            return eventRepository.findOne(Long.parseLong(id));
+        } catch (Exception e) {
+            throw new Exception("id parameter is invalid");
+        }
+    }
+
 
     @PostMapping(path = "/add")
     public @ResponseBody
