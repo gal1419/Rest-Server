@@ -62,9 +62,7 @@ public class EventController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //storageService.store(file, file.getOriginalFilename() + UUID.randomUUID().toString());
         this.eventRepository.save(event);
-
         return event;
     }
 

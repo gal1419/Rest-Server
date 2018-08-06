@@ -3,6 +3,8 @@ package com.app.controller;
 import com.app.module.ApplicationUser;
 import com.app.module.Event;
 import com.app.repository.ApplicationUserRepository;
+import com.app.repository.EventRepository;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,9 @@ public class UserController {
 
     @Autowired
     private ApplicationUserRepository applicationUserRepository;
+
+    @Autowired
+    private EventRepository eventRepository;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -76,6 +81,25 @@ public class UserController {
 
         List<Event> events = applicationUser.getEvents();
         return events;
+    }
+
+    @PostMapping("/add-event/{eventId}")
+    public @ResponseBody
+    Iterable<Event> getUserEvents(HttpServletRequest request, @PathVariable(value = "eventId") String id) throws Exception {
+        Principal p = request.getUserPrincipal();
+        ApplicationUser applicationUser = applicationUserRepository.findByEmail(p.getName());
+        Event event = eventRepository.findOne(Long.parseLong(id));
+
+        if (event == null) {
+            throw new NotFoundException("event with id" + id + "was not found");
+        }
+        List<Event> userEvents = applicationUser.getEvents();
+
+        if (userEvents.contains(event)) {
+            return userEvents;
+        }
+
+        return  applicationUserRepository.save(applicationUser).getEvents();
     }
 
 }
