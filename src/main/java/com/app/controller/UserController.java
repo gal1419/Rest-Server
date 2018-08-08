@@ -39,8 +39,7 @@ public class UserController {
         }
 
         ApplicationUser applicationUser = new ApplicationUser();
-        applicationUser.setFirstName(user.getFirstName());
-        applicationUser.setLastName(user.getLastName());
+        applicationUser.setFullName(user.getFullName());
         applicationUser.setEmail(user.getEmail());
         applicationUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 

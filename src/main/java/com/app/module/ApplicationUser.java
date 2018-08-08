@@ -17,12 +17,8 @@ public class ApplicationUser {
     private Long id;
 
     @NotEmpty
-    @Column(name = "first_name")
-    private String firstName;
-
-    @NotEmpty
-    @Column(name = "last_name")
-    private String lastName;
+    @Column(name = "full_name")
+    private String fullName;
 
     @NotEmpty
     @Email
@@ -49,9 +45,8 @@ public class ApplicationUser {
     public ApplicationUser() {
     }
 
-    public ApplicationUser(String firstName, String lastName, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public ApplicationUser(String fullName, String lastName, String email) {
+        this.fullName = fullName;
         this.email = email;
     }
 
@@ -63,20 +58,12 @@ public class ApplicationUser {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return this.firstName;
+    public String getFullName() {
+        return this.fullName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return this.lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getEmail() {
@@ -111,8 +98,7 @@ public class ApplicationUser {
     public String toString() {
         return "ApplicationUser{" +
                 "Id=" + this.id +
-                ", FirstName='" + this.firstName + '\'' +
-                ", LastName='" + this.lastName + '\'' +
+                ", FirstName='" + this.fullName + '\'' +
                 ", email='" + email + '\'' +
                 ", events=" + events +
                 '}';
