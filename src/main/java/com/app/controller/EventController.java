@@ -4,7 +4,7 @@ import com.app.module.ApplicationUser;
 import com.app.module.Event;
 import com.app.repository.ApplicationUserRepository;
 import com.app.repository.EventRepository;
-import com.app.storage.StorageService;
+import org.hibernate.Hibernate;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +23,13 @@ import java.security.Principal;
 @RequestMapping(path = "/event")
 public class EventController {
 
-    private final StorageService storageService;
     @Autowired
     private EventRepository eventRepository;
     @Autowired
     private ApplicationUserRepository applicationUserRepository;
 
     @Autowired
-    public EventController(StorageService storageService) {
-        this.storageService = storageService;
+    public EventController() {
     }
 
     @GetMapping(path = "/{id}")
@@ -42,6 +40,35 @@ public class EventController {
         } catch (Exception e) {
             throw new Exception("id parameter is invalid");
         }
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public @ResponseBody
+    Event deleteEventById(HttpServletRequest request, @PathVariable(value = "id") String id) throws Exception {
+
+        Principal p = request.getUserPrincipal();
+        ApplicationUser authenticatedUser = applicationUserRepository.findByEmail(p.getName());
+
+        Event event;
+        try {
+            Long eventId = Long.parseLong(id);
+            event = eventRepository.findOne(eventId);
+
+            if (event == null) {
+                throw new Exception("event was not found!");
+            }
+
+            if (!event.getOwner().getId().equals(authenticatedUser.getId())) {
+                throw new Exception("Forbidden");
+            }
+
+            Hibernate.initialize(event.getParticipants());
+            eventRepository.delete(eventId);
+        } catch (Exception e) {
+            throw new Exception("id parameter is invalid");
+        }
+
+        return event;
     }
 
 
@@ -62,8 +89,7 @@ public class EventController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.eventRepository.save(event);
-        return event;
+        return this.eventRepository.save(event);
     }
 
     @GetMapping(path = "/all")
