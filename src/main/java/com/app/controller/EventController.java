@@ -4,6 +4,7 @@ import com.app.module.ApplicationUser;
 import com.app.module.Event;
 import com.app.repository.ApplicationUserRepository;
 import com.app.repository.EventRepository;
+import com.app.repository.PictureRepository;
 import org.hibernate.Hibernate;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +28,9 @@ public class EventController {
     private EventRepository eventRepository;
     @Autowired
     private ApplicationUserRepository applicationUserRepository;
+    @Autowired
+    private PictureRepository pictureRepository;
+
 
     @Autowired
     public EventController() {
@@ -63,7 +67,8 @@ public class EventController {
             }
 
             Hibernate.initialize(event.getParticipants());
-            eventRepository.delete(eventId);
+            pictureRepository.delete(pictureRepository.findByEvent(event));
+            eventRepository.delete(event);
         } catch (Exception e) {
             throw new Exception("id parameter is invalid");
         }
