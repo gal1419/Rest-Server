@@ -78,8 +78,7 @@ public class UserController {
             throw new UsernameNotFoundException("User not found");
         }
 
-        List<Event> events = applicationUser.getEvents();
-        return events;
+        return applicationUser.getEvents();
     }
 
     @PostMapping("/add-event/{eventId}")
@@ -98,7 +97,8 @@ public class UserController {
             return userEvents;
         }
 
-        return  applicationUserRepository.save(applicationUser).getEvents();
+        applicationUser.addEvent(event);
+        return applicationUserRepository.save(applicationUser).getEvents();
     }
 
 }
